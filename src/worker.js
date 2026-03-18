@@ -5,141 +5,210 @@ const APP_HTML = `<!doctype html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>WaterDamagePromoLab</title>
+    <title>Emergency Response Console</title>
     <style>
       :root {
-        --bg: #eef4f7;
-        --panel: rgba(255,255,255,0.92);
-        --ink: #20313b;
-        --muted: #627480;
-        --line: rgba(32,49,59,0.12);
-        --brand: #2877a8;
-        --accent: #d97732;
-        --shadow: 0 28px 72px rgba(32,49,59,0.14);
+        --bg:#eef5f8;
+        --panel:rgba(255,255,255,.9);
+        --ink:#1f313c;
+        --muted:#617581;
+        --line:rgba(31,49,60,.1);
+        --brand:#1f7eaf;
+        --accent:#dd7a34;
+        --shadow:0 26px 80px rgba(31,49,60,.12);
       }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        color: var(--ink);
-        font-family: "Helvetica Neue", Arial, sans-serif;
+      *{box-sizing:border-box}
+      body{
+        margin:0;color:var(--ink);font-family:"Helvetica Neue",Arial,sans-serif;
         background:
-          radial-gradient(circle at 12% 14%, rgba(40,119,168,0.16), transparent 24%),
-          radial-gradient(circle at 84% 18%, rgba(217,119,50,0.12), transparent 22%),
-          linear-gradient(145deg, #fbfdff, var(--bg));
+          radial-gradient(circle at 12% 14%, rgba(31,126,175,.16), transparent 24%),
+          radial-gradient(circle at 84% 18%, rgba(221,122,52,.13), transparent 22%),
+          linear-gradient(180deg,#fbfdff,var(--bg));
       }
-      .page { width:min(1260px, calc(100vw - 28px)); margin:0 auto; padding:24px 0 56px; }
-      .hero, .panel, .card { background:var(--panel); border:1px solid var(--line); box-shadow:var(--shadow); backdrop-filter:blur(12px); }
-      .hero { border-radius:34px; padding:30px; }
-      .panel, .card { border-radius:28px; padding:22px; }
-      .topbar, .row { display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
-      .brand { text-transform:uppercase; letter-spacing:0.18em; font-size:0.82rem; color:var(--brand); }
-      .chip { display:inline-block; padding:8px 12px; border-radius:999px; background:rgba(40,119,168,0.1); color:var(--brand); font-size:0.86rem; }
-      .hero-grid { display:grid; grid-template-columns:1.08fr 0.92fr; gap:26px; align-items:end; margin-top:20px; }
-      h1 { margin:12px 0; font-size:clamp(3rem, 5vw, 5rem); line-height:0.92; letter-spacing:-0.04em; max-width:11ch; }
-      h2, h3 { margin-top:0; }
-      .lead, .sub, .mini { color:var(--muted); line-height:1.66; }
-      .points { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; margin-top:22px; }
-      .point { border-radius:18px; padding:14px; background:rgba(255,255,255,0.62); border:1px solid rgba(32,49,59,0.08); }
-      .point strong { display:block; margin-bottom:6px; }
-      .aside { border-radius:28px; padding:24px; color:#f9fdff; background:linear-gradient(180deg, rgba(32,49,59,0.98), rgba(40,119,168,0.94)); }
-      .price { font-size:3rem; margin:8px 0; }
-      .layout { display:grid; grid-template-columns:0.95fr 1.05fr; gap:18px; margin-top:22px; }
-      form { display:grid; gap:14px; }
-      label { display:grid; gap:8px; font-size:0.96rem; }
-      input, textarea { width:100%; font:inherit; color:var(--ink); padding:14px 16px; border-radius:18px; border:1px solid rgba(32,49,59,0.12); background:rgba(255,255,255,0.94); }
-      textarea { min-height:190px; resize:vertical; }
-      button, .ghost { appearance:none; border:0; border-radius:999px; padding:14px 18px; font:inherit; cursor:pointer; }
-      button { background:var(--brand); color:white; }
-      .ghost { background:rgba(217,119,50,0.12); color:var(--accent); }
-      button[disabled] { opacity:0.72; cursor:progress; }
-      .results { display:grid; gap:14px; }
-      .promo { margin-top:16px; padding-top:16px; border-top:1px solid rgba(32,49,59,0.08); }
-      .promo:first-of-type { margin-top:0; padding-top:0; border-top:0; }
-      .ad-image { width:100%; display:block; border-radius:18px; border:1px solid rgba(32,49,59,0.08); margin-top:12px; }
-      .storyboard { margin:10px 0 0; padding-left:20px; }
-      .storyboard li + li, ol li + li { margin-top:8px; }
-      .loading, .error { display:none; }
-      .loading { color:var(--brand); }
-      .error { color:#a52518; }
-      @media (max-width:920px) { .hero-grid, .layout, .points { grid-template-columns:1fr; } h1 { max-width:none; } }
+      .page{width:min(1380px,calc(100vw - 28px));margin:0 auto;padding:24px 0 56px}
+      .hero,.panel,.card{background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(14px)}
+      .hero{border-radius:30px;padding:28px}
+      .panel,.card{border-radius:24px;padding:20px}
+      .topbar,.row,.split{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+      .brand{text-transform:uppercase;letter-spacing:.18em;font-size:.8rem;color:var(--brand)}
+      .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(31,126,175,.1);color:var(--brand);font-size:.86rem}
+      .hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:24px;margin-top:18px;align-items:end}
+      h1{margin:12px 0;font-size:clamp(3rem,5vw,5rem);line-height:.92;letter-spacing:-.05em;max-width:11ch}
+      h2,h3,h4{margin-top:0}
+      .lead,.sub,.mini{color:var(--muted);line-height:1.66}
+      .hero-list,.overview,.triple{display:grid;gap:12px}
+      .hero-list,.overview{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .triple{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .hero-item,.metric{padding:14px;border-radius:18px;background:rgba(255,255,255,.58);border:1px solid rgba(31,49,60,.08)}
+      .hero-item strong,.metric span{display:block}
+      .metric strong{display:block;margin-top:8px;font-size:1.35rem}
+      .statbox{padding:22px;border-radius:24px;color:#f7fbff;background:linear-gradient(180deg,rgba(31,49,60,.98),rgba(31,126,175,.94))}
+      .statbox small{text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.72)}
+      .statbox strong{display:block;font-size:2.5rem;margin:10px 0}
+      .layout{display:grid;grid-template-columns:430px minmax(0,1fr);gap:18px;margin-top:20px;align-items:start}
+      form{display:grid;gap:14px}
+      .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+      label{display:grid;gap:8px;font-size:.94rem}
+      input,textarea,select{width:100%;font:inherit;color:var(--ink);padding:13px 14px;border-radius:16px;border:1px solid rgba(31,49,60,.12);background:rgba(255,255,255,.9)}
+      textarea{min-height:140px;resize:vertical}
+      button,.ghost{appearance:none;border:0;border-radius:999px;padding:13px 18px;font:inherit;cursor:pointer}
+      button{background:var(--brand);color:white}
+      .ghost{background:rgba(221,122,52,.12);color:var(--accent)}
+      button[disabled]{opacity:.72;cursor:progress}
+      .results,.stack{display:grid;gap:16px}
+      .board{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+      .pill{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(31,126,175,.1);border:1px solid rgba(31,126,175,.12);color:#19658d;font-size:.84rem}
+      .callout,.warn{padding:14px;border-radius:18px}
+      .callout{background:rgba(31,126,175,.08);border:1px solid rgba(31,126,175,.16)}
+      .warn{background:rgba(221,122,52,.1);border:1px solid rgba(221,122,52,.18)}
+      .campaign{padding-top:16px;margin-top:16px;border-top:1px solid rgba(31,49,60,.08)}
+      .campaign:first-of-type{margin-top:0;padding-top:0;border-top:0}
+      .ad-image{width:100%;display:block;margin-top:12px;border-radius:18px;border:1px solid rgba(31,49,60,.08)}
+      .loading,.error{display:none}
+      .loading{color:var(--brand)}
+      .error{color:#a52818}
+      @media (max-width:1120px){.hero-grid,.layout,.board,.grid-2,.hero-list,.overview,.triple{grid-template-columns:1fr}h1{max-width:none}}
     </style>
   </head>
   <body>
     <div class="page">
       <section class="hero">
         <div class="topbar">
-          <div class="brand">WaterDamagePromoLab</div>
-          <div class="chip">Emergency water mitigation, flood cleanup, drying, restoration campaigns</div>
+          <div class="brand">Emergency Response Console</div>
+          <div class="chip">Dispatch triage, insurer-safe talk track, drying plan, referral follow-up</div>
         </div>
         <div class="hero-grid">
           <div>
-            <div class="chip">Built for local water mitigation and restoration companies</div>
-            <h1>Turn one mitigation offer into three booked-job campaigns.</h1>
-            <p class="lead">WaterDamagePromoLab creates three high-intent ad angles, three vertical visual concepts, and three short-form video prompts for water mitigation crews, flood cleanup operators, and restoration contractors. Add a public property image URL to reshape a real damage photo into ad-ready creative.</p>
-            <div class="points">
-              <div class="point"><strong>High-urgency local demand</strong><span class="mini">Built for burst pipes, storm intrusion, flood cleanup, structural drying, and insurance-friendly restoration leads.</span></div>
-              <div class="point"><strong>Creative plus offer strategy</strong><span class="mini">Outputs concepts for Meta, Reels, landing pages, Google local campaigns, and emergency-call funnels.</span></div>
-              <div class="point"><strong>Easy to resell</strong><span class="mini">Package this as a monthly creative engine for restoration operators who need urgent local leads and better close rates.</span></div>
+            <div class="chip">For water mitigation crews, restoration operators, and emergency intake teams</div>
+            <h1>Turn a damage call into a controlled, billable response flow.</h1>
+            <p class="lead">This rework replaces the old promo page with a water-damage response console. It turns an intake brief into triage, homeowner talk tracks, insurer-safe positioning, drying plan framing, referral follow-up, and campaign assets that a real restoration operator can use.</p>
+            <div class="hero-list">
+              <div class="hero-item"><strong>Dispatch clarity</strong><span class="mini">Separates true emergency jobs from slower restoration follow-up opportunities.</span></div>
+              <div class="hero-item"><strong>Sales support</strong><span class="mini">Outputs call scripts, SMS, insurer-safe language, and realtor/plumber referral follow-up.</span></div>
+              <div class="hero-item"><strong>Creative support</strong><span class="mini">Generates emergency-response visuals and short video hooks for high-intent local ads.</span></div>
             </div>
           </div>
-          <aside class="aside">
-            <small>Suggested pricing</small>
-            <div class="price">$399<span style="font-size:1rem">/month</span></div>
-            <p class="mini" style="color: rgba(249,253,255,0.84)">Charge per territory. Upsell emergency-call funnels, insurance-claim landing pages, review capture, and realtor referral pages.</p>
-          </aside>
+          <div class="statbox">
+            <small>Suggested Pricing</small>
+            <strong>$850/mo</strong>
+            <div class="mini" style="color:rgba(247,251,255,.84)">Per metro or referral territory, plus setup for dispatch scripts, insurer-safe language, and referral partner funnels.</div>
+          </div>
         </div>
       </section>
+
       <section class="layout">
         <section class="panel">
-          <h2>Build Promo Pack</h2>
-          <p class="sub">Paste the water-damage offer brief. Add an optional public property image URL to turn a real damage photo into a polished campaign concept.</p>
-          <form id="promoForm">
-            <label>
-              Offer brief
-              <textarea name="notes" required placeholder="A local water damage company wants three campaign angles: one emergency water extraction offer, one structural drying and mitigation campaign, and one insurance-friendly restoration or rebuild coordination offer. Highlight rapid response, documentation, drying technology, and clean communication."></textarea>
-            </label>
-            <label>
-              Optional property image URL
-              <input name="imageUrl" type="url" placeholder="https://..." />
-            </label>
-            <div class="row">
-              <button id="submitBtn" type="submit">Generate Promo Pack</button>
-              <button id="demoBtn" type="button" class="ghost">Load demo brief</button>
+          <h2>Build Response Pack</h2>
+          <p class="sub">Fill this like a real intake. The output is meant for dispatch and close control, not generic ads.</p>
+          <form id="consoleForm">
+            <div class="grid-2">
+              <label>Company name<input name="companyName" placeholder="Rapid Dry Response" required /></label>
+              <label>Market<input name="market" placeholder="Houston, TX" required /></label>
             </div>
-            <div class="loading" id="loading">Writing mitigation angles, visuals, and short-form video prompts...</div>
-            <div class="error" id="error"></div>
+            <div class="grid-2">
+              <label>Job type
+                <select name="jobType">
+                  <option>Burst pipe / leak</option>
+                  <option>Storm intrusion</option>
+                  <option>Flooded interior</option>
+                  <option>Mitigation + rebuild coordination</option>
+                </select>
+              </label>
+              <label>Urgency level
+                <select name="urgencyLevel">
+                  <option>Immediate emergency</option>
+                  <option>Same-day but stable</option>
+                  <option>Inspection / estimate follow-up</option>
+                </select>
+              </label>
+            </div>
+            <div class="grid-2">
+              <label>Insurance posture
+                <select name="insurancePosture">
+                  <option>Claim documentation help</option>
+                  <option>Insurance-friendly but careful language</option>
+                  <option>Mostly retail pay</option>
+                </select>
+              </label>
+              <label>Rebuild capability
+                <select name="rebuildCapability">
+                  <option>Mitigation only</option>
+                  <option>Mitigation + partner rebuild</option>
+                  <option>Full mitigation + rebuild</option>
+                </select>
+              </label>
+            </div>
+            <div class="grid-2">
+              <label>Referral source
+                <select name="referralSource">
+                  <option>Homeowner direct</option>
+                  <option>Plumber referral</option>
+                  <option>Realtor / property manager</option>
+                  <option>Insurance-related lead</option>
+                </select>
+              </label>
+              <label>After-hours coverage
+                <select name="afterHours">
+                  <option>24/7 dispatch live</option>
+                  <option>Callback within 30 minutes</option>
+                  <option>Business hours mainly</option>
+                </select>
+              </label>
+            </div>
+            <label>Optional property image URL<input name="imageUrl" type="url" placeholder="https://..." /></label>
+            <label>Business notes<textarea name="notes" placeholder="We want cleaner emergency intake, better insurer-safe wording, faster plumber/referral follow-up, and an easier way to move mitigation jobs into rebuild revenue when appropriate." required></textarea></label>
+            <div class="row">
+              <button id="submitBtn" type="submit">Build Response Console</button>
+              <button id="demoBtn" type="button" class="ghost">Load demo</button>
+            </div>
+            <div id="loading" class="loading">Building dispatch, drying, follow-up, and media assets...</div>
+            <div id="error" class="error"></div>
           </form>
         </section>
-        <section class="panel">
-          <h2>Live Output</h2>
-          <p class="sub">Each pack returns 3 offer angles, 3 image concepts, 3 video prompts, rollout ideas, and a package you can sell to mitigation and restoration companies.</p>
-          <div id="empty" class="results"><div class="card"><h3>No promo pack yet</h3><p class="mini">Generate one to get three local restoration campaign concepts.</p></div></div>
-          <div id="results" class="results" hidden></div>
+
+        <section class="results">
+          <div id="empty" class="card">
+            <h2>No response pack yet</h2>
+            <p class="sub">Generate one to get triage guidance, call handling, drying scope framing, follow-up assets, and campaign angles.</p>
+          </div>
+          <div id="results" hidden></div>
         </section>
       </section>
     </div>
+
     <script>
-      const form = document.getElementById("promoForm");
+      const form = document.getElementById("consoleForm");
       const submitBtn = document.getElementById("submitBtn");
       const demoBtn = document.getElementById("demoBtn");
       const loading = document.getElementById("loading");
       const error = document.getElementById("error");
       const empty = document.getElementById("empty");
       const results = document.getElementById("results");
+
       demoBtn.addEventListener("click", () => {
-        form.notes.value = "A local water damage company wants three campaign angles: one emergency water extraction offer, one structural drying and mitigation campaign, and one insurance-friendly restoration or rebuild coordination offer. Highlight rapid response, documentation, drying technology, and clean communication.";
+        form.companyName.value = "Rapid Dry Response";
+        form.market.value = "Houston, TX";
+        form.jobType.value = "Storm intrusion";
+        form.urgencyLevel.value = "Immediate emergency";
+        form.insurancePosture.value = "Claim documentation help";
+        form.rebuildCapability.value = "Mitigation + partner rebuild";
+        form.referralSource.value = "Plumber referral";
+        form.afterHours.value = "24/7 dispatch live";
         form.imageUrl.value = "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80";
+        form.notes.value = "We want cleaner emergency intake, better insurer-safe wording, faster plumber/referral follow-up, and an easier way to move mitigation jobs into rebuild revenue when appropriate.";
       });
+
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
         submitBtn.disabled = true;
         loading.style.display = "block";
         error.style.display = "none";
         try {
-          const response = await fetch("/api/promo-pack", {
+          const payload = Object.fromEntries(new FormData(form).entries());
+          const response = await fetch("/api/console", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify(Object.fromEntries(new FormData(form).entries()))
+            body: JSON.stringify(payload)
           });
           const data = await response.json();
           if (!response.ok) throw new Error(data.error || "Generation failed");
@@ -154,41 +223,73 @@ const APP_HTML = `<!doctype html>
           loading.style.display = "none";
         }
       });
+
       function render(data) {
-        const promos = (data.promos || []).map((item) => {
-          const image = item.imageUrl ? '<img class="ad-image" src="' + escapeHtml(item.imageUrl) + '" alt="Water damage promo" />' : "";
-          const shots = Array.isArray(item.storyboard) && item.storyboard.length ? '<ol class="storyboard">' + item.storyboard.map((shot) => '<li>' + escapeHtml(shot) + '</li>').join("") + '</ol>' : '<p class="mini">No storyboard returned.</p>';
-          const status = item.statusNote ? '<p class="mini"><strong>Status:</strong> ' + escapeHtml(item.statusNote) + '</p>' : "";
-          return '<div class="promo">' +
-            '<strong>' + escapeHtml(item.name || "Promo") + '</strong>' +
-            '<p class="mini"><strong>Headline:</strong> ' + escapeHtml(item.headline || "") + '</p>' +
-            '<p class="mini"><strong>Subcopy:</strong> ' + escapeHtml(item.subcopy || "") + '</p>' +
-            '<p class="mini"><strong>CTA:</strong> ' + escapeHtml(item.cta || "") + '</p>' +
-            '<p class="mini"><strong>Image prompt:</strong> ' + escapeHtml(item.visualPrompt || "") + '</p>' +
-            '<p class="mini"><strong>Video prompt:</strong> ' + escapeHtml(item.videoPrompt || "") + '</p>' +
-            '<p class="mini"><strong>3-shot storyboard:</strong></p>' + shots + status + image + '</div>';
-        }).join("");
-        results.innerHTML = '<section class="card"><h3>Summary</h3>' +
-          '<p class="mini"><strong>Target buyer:</strong> ' + escapeHtml(data.summary?.targetBuyer || "") + '</p>' +
-          '<p class="mini"><strong>Positioning:</strong> ' + escapeHtml(data.summary?.positioning || "") + '</p>' +
-          '<p class="mini"><strong>Best use:</strong> ' + escapeHtml(data.summary?.bestUse || "") + '</p>' +
-          '<p class="mini"><strong>Promo count:</strong> ' + escapeHtml(data.promoCount || 0) + '</p>' +
-          '<p class="mini"><strong>Image count:</strong> ' + escapeHtml(data.imageCount || 0) + '</p>' +
-          '<p class="mini"><strong>Video-ready count:</strong> ' + escapeHtml(data.videoReadyCount || 0) + '</p></section>' +
-          '<section class="card"><h3>Promo Directions</h3>' + (promos || "<p class=mini>No promos returned.</p>") + '</section>' +
-          '<section class="card"><h3>Launch Moves</h3>' + renderList(data.launchMoves) + '</section>' +
-          '<section class="card"><h3>Service Offer</h3>' +
-          '<p class="mini"><strong>Package:</strong> ' + escapeHtml(data.serviceOffer?.packageName || "") + '</p>' +
-          '<p class="mini"><strong>Price idea:</strong> ' + escapeHtml(data.serviceOffer?.priceIdea || "") + '</p>' +
-          '<p class="mini"><strong>Upsell:</strong> ' + escapeHtml(data.serviceOffer?.upsell || "") + '</p></section>';
+        const campaigns = (data.campaigns || []).map((item) => (
+          '<div class="campaign"><h4>' + e(item.name) + '</h4>' +
+          '<p class="mini"><strong>Headline:</strong> ' + e(item.headline) + '</p>' +
+          '<p class="mini"><strong>Angle reason:</strong> ' + e(item.angleReason) + '</p>' +
+          '<p class="mini"><strong>CTA:</strong> ' + e(item.cta) + '</p>' +
+          '<p class="mini"><strong>Visual prompt:</strong> ' + e(item.visualPrompt) + '</p>' +
+          '<p class="mini"><strong>Video hook:</strong> ' + e(item.videoPrompt) + '</p>' +
+          list(item.storyboard || []) + '</div>'
+        )).join("");
+        const planCards = (data.responsePlan?.pathOptions || []).map((item) => (
+          '<div class="card"><h4>' + e(item.name) + '</h4>' +
+          '<p class="mini"><strong>Best for:</strong> ' + e(item.bestFor) + '</p>' +
+          '<div class="mini"><strong>Includes:</strong></div>' + list(item.includes || []) + '</div>'
+        )).join("");
+        const heroImage = data.media?.heroImageUrl ? '<img class="ad-image" src="' + e(data.media.heroImageUrl) + '" alt="Water damage concept image" />' : '';
+        const mediaStatus = data.media?.statusNote ? '<div class="' + (data.media.heroImageUrl ? 'callout' : 'warn') + '"><strong>Media status:</strong> ' + e(data.media.statusNote) + '</div>' : '';
+        const trust = (data.scoreboard?.trustPoints || []).map((item) => '<span class="pill">' + e(item) + '</span>').join("");
+        results.innerHTML =
+          '<div class="overview">' +
+            metric("Response score", data.scoreboard?.responseScore + "/100") +
+            metric("Primary motion", data.summary?.recommendedMotion || "") +
+            metric("Upsell path", data.summary?.upsellPath || "") +
+            metric("Image ready", data.media?.heroImageUrl ? "1 concept" : "No usable image") +
+          '</div>' +
+          '<div class="board">' +
+            '<div class="stack">' +
+              '<section class="card"><h3>Dispatch Summary</h3>' +
+              '<p class="mini"><strong>Company:</strong> ' + e(data.summary?.companyName || "") + '</p>' +
+              '<p class="mini"><strong>Market:</strong> ' + e(data.summary?.market || "") + '</p>' +
+              '<p class="mini"><strong>Lead story:</strong> ' + e(data.summary?.leadStory || "") + '</p>' +
+              '<p class="mini"><strong>Close move:</strong> ' + e(data.summary?.closeMove || "") + '</p>' +
+              '<div style="margin-top:12px">' + trust + '</div></section>' +
+              '<section class="card"><h3>Triage Narrative</h3>' +
+              '<p class="mini"><strong>Dispatch framing:</strong> ' + e(data.triageNarrative?.dispatchFraming || "") + '</p>' +
+              '<p class="mini"><strong>Homeowner talk track:</strong> ' + e(data.triageNarrative?.homeownerTalkTrack || "") + '</p>' +
+              '<p class="mini"><strong>Insurance-safe wording:</strong> ' + e(data.triageNarrative?.insuranceWording || "") + '</p>' +
+              '<p class="mini"><strong>Rebuild transition:</strong> ' + e(data.triageNarrative?.rebuildTransition || "") + '</p>' +
+              '</section>' +
+              '<section class="card"><h3>Response Scripts</h3>' +
+              '<p class="mini"><strong>Dispatch script:</strong> ' + e(data.salesAssets?.dispatchScript || "") + '</p>' +
+              '<p class="mini"><strong>Plumber/referral follow-up:</strong> ' + e(data.salesAssets?.referralFollowUp || "") + '</p>' +
+              '<p class="mini"><strong>SMS:</strong> ' + e(data.salesAssets?.smsFollowUp || "") + '</p>' +
+              '<p class="mini"><strong>Email subject:</strong> ' + e(data.salesAssets?.emailSubject || "") + '</p>' +
+              '<p class="mini"><strong>Email body:</strong> ' + e(data.salesAssets?.emailBody || "") + '</p>' +
+              '<div class="mini"><strong>Objection handling:</strong></div>' + list(data.salesAssets?.objectionHandling || []) + '</section>' +
+            '</div>' +
+            '<div class="stack">' +
+              '<section class="card"><h3>Response Paths</h3><div class="triple">' + planCards + '</div>' +
+              '<div class="callout" style="margin-top:14px"><strong>Documentation hook:</strong> ' + e(data.responsePlan?.documentationHook || "") + '</div>' +
+              '<div class="warn" style="margin-top:12px"><strong>Compliance note:</strong> ' + e(data.responsePlan?.complianceNote || "") + '</div></section>' +
+              '<section class="card"><h3>Campaign Angles</h3>' + campaigns + '</section>' +
+              '<section class="card"><h3>Launch Plan</h3>' +
+              '<div class="mini"><strong>This week:</strong></div>' + list(data.launchPlan?.thisWeek || []) +
+              '<div class="mini"><strong>Next 30 days:</strong></div>' + list(data.launchPlan?.next30Days || []) +
+              '<div class="mini"><strong>KPIs:</strong></div>' + list(data.launchPlan?.kpis || []) + '</section>' +
+              '<section class="card"><h3>Media Concept</h3>' +
+              '<p class="mini"><strong>Primary visual prompt:</strong> ' + e(data.media?.primaryVisualPrompt || "") + '</p>' +
+              '<p class="mini"><strong>Video hook:</strong> ' + e(data.media?.videoHook || "") + '</p>' +
+              '<div class="mini"><strong>Storyboard:</strong></div>' + list(data.media?.storyboard || []) +
+              mediaStatus + heroImage + '</section>' +
+            '</div></div>';
       }
-      function renderList(items) {
-        if (!Array.isArray(items) || !items.length) return '<p class="mini">No notes returned.</p>';
-        return '<ol>' + items.map((item) => '<li>' + escapeHtml(item) + '</li>').join("") + '</ol>';
-      }
-      function escapeHtml(value) {
-        return String(value ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
-      }
+      function metric(label, value) { return '<div class="metric"><span>' + e(label) + '</span><strong>' + e(value || "") + '</strong></div>'; }
+      function list(items) { if (!Array.isArray(items) || !items.length) return '<div class="mini">No items returned.</div>'; return '<ol>' + items.map((item) => '<li class="mini">' + e(item) + '</li>').join("") + '</ol>'; }
+      function e(value) { return String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;"); }
     </script>
   </body>
 </html>`;
@@ -199,50 +300,228 @@ export default {
     if (request.method === "GET" && url.pathname === "/") {
       return new Response(APP_HTML, { headers: { "content-type": "text/html; charset=utf-8" } });
     }
-    if (request.method === "POST" && url.pathname === "/api/promo-pack") {
+    if (request.method === "POST" && (url.pathname === "/api/console" || url.pathname === "/api/promo-pack")) {
       try {
-        const { notes, imageUrl } = await request.json();
-        if (!notes?.trim()) return json({ error: "Offer brief is required." }, 400);
-        const strategy = fallbackStrategy(notes.trim(), "Stable local strategy mode");
-        const promos = await Promise.all((strategy.promos || []).slice(0, 3).map((promo) => renderPromo(promo, imageUrl?.trim())));
-        return json({
-          summary: strategy.summary,
-          promos,
-          launchMoves: strategy.launchMoves || [],
-          serviceOffer: strategy.serviceOffer || {},
-          promoCount: promos.length,
-          imageCount: promos.filter((item) => item.imageUrl).length,
-          videoReadyCount: promos.filter((item) => item.videoPrompt).length
+        const payload = await request.json();
+        const notes = String(payload.notes || "").trim();
+        if (!notes) return json({ error: "Business notes are required." }, 400);
+        const workspace = await buildWorkspace({
+          companyName: String(payload.companyName || "Restoration company").trim(),
+          market: String(payload.market || "Local market").trim(),
+          jobType: String(payload.jobType || "Burst pipe / leak"),
+          urgencyLevel: String(payload.urgencyLevel || "Immediate emergency"),
+          insurancePosture: String(payload.insurancePosture || "Insurance-friendly but careful language"),
+          rebuildCapability: String(payload.rebuildCapability || "Mitigation only"),
+          referralSource: String(payload.referralSource || "Homeowner direct"),
+          afterHours: String(payload.afterHours || "24/7 dispatch live"),
+          notes,
+          imageUrl: String(payload.imageUrl || "").trim()
         });
+        if (url.pathname === "/api/promo-pack") {
+          return json({
+            summary: {
+              targetBuyer: workspace.summary.leadStory,
+              positioning: workspace.summary.closeMove,
+              bestUse: workspace.launchPlan.thisWeek.join(" ")
+            },
+            promos: workspace.campaigns.map((item) => ({
+              name: item.name,
+              headline: item.headline,
+              subcopy: item.angleReason,
+              cta: item.cta,
+              visualPrompt: item.visualPrompt,
+              editPrompt: item.editPrompt,
+              videoPrompt: item.videoPrompt,
+              storyboard: item.storyboard
+            })),
+            launchMoves: workspace.launchPlan.thisWeek,
+            serviceOffer: {
+              packageName: "Emergency Response Console",
+              priceIdea: "$850-$1600 monthly plus setup",
+              upsell: "Add dispatch scripts, referral funnels, CRM notes, and rebuild follow-up automation."
+            },
+            promoCount: workspace.campaigns.length,
+            imageCount: workspace.media.heroImageUrl ? 1 : 0,
+            videoReadyCount: workspace.campaigns.filter((item) => item.videoPrompt).length
+          });
+        }
+        return json(workspace);
       } catch (error) {
-        return json({ error: error.message || "Failed to generate promo pack." }, 500);
+        return json({ error: error.message || "Failed to build restoration workspace." }, 500);
       }
     }
     return new Response("Not found", { status: 404 });
   }
 };
 
-async function renderPromo(promo, imageUrl) {
-  if (imageUrl) {
-    try {
-      return await editPromo(promo, imageUrl);
-    } catch (error) {
-      try {
-        const fallback = await generatePromo(promo);
-        return { ...fallback, statusNote: `Source-image edit failed, used generation fallback: ${error.message}` };
-      } catch (fallbackError) {
-        return { ...pickPromoFields(promo), imageUrl: "", statusNote: `Source-image edit failed, and generation fallback failed: ${fallbackError.message}` };
-      }
+async function buildWorkspace(input) {
+  const strategy = buildStrategy(input);
+  const media = await buildMedia(strategy.primaryCampaign, input.imageUrl);
+  return {
+    summary: {
+      companyName: input.companyName,
+      market: input.market,
+      recommendedMotion: strategy.recommendedMotion,
+      upsellPath: strategy.upsellPath,
+      leadStory: strategy.leadStory,
+      closeMove: strategy.closeMove
+    },
+    scoreboard: strategy.scoreboard,
+    triageNarrative: strategy.triageNarrative,
+    salesAssets: strategy.salesAssets,
+    responsePlan: strategy.responsePlan,
+    campaigns: strategy.campaigns,
+    launchPlan: strategy.launchPlan,
+    media
+  };
+}
+
+function buildStrategy(input) {
+  const immediate = input.urgencyLevel.includes("Immediate");
+  const sameDay = input.urgencyLevel.includes("Same-day");
+  const claimHelp = input.insurancePosture.includes("documentation");
+  const rebuild = input.rebuildCapability.includes("rebuild");
+  const partnerRebuild = input.rebuildCapability.includes("partner");
+  const plumber = input.referralSource.includes("Plumber");
+  const realtor = input.referralSource.includes("Realtor");
+  const liveDispatch = input.afterHours.includes("24/7");
+
+  const responseScore = Math.min(96, 56 + (immediate ? 14 : sameDay ? 8 : 2) + (claimHelp ? 8 : 3) + (rebuild ? 8 : partnerRebuild ? 5 : 1) + (liveDispatch ? 6 : 1));
+  const recommendedMotion = immediate ? "Lead with dispatch speed, photo documentation, and drying containment." : "Lead with inspection clarity and documentation that earns trust before escalation.";
+  const upsellPath = rebuild ? "Move mitigation into controlled rebuild scope when moisture, material loss, and homeowner fatigue justify it." : partnerRebuild ? "Use partner rebuild handoff as a trust-preserving revenue extension." : "Keep the close centered on mitigation and drying quality.";
+  const leadStory = plumber ? "Lead came through a plumber-adjacent emergency path and needs speed plus credibility." : realtor ? "Lead likely values documentation, communication, and property-protection professionalism." : "Lead is a stressed homeowner who needs calm, fast, clear next steps.";
+  const closeMove = claimHelp ? "Use insurer-safe wording and photo documentation to reduce homeowner confusion without promising claim outcomes." : "Use urgency and clean communication to move from panic to permission quickly.";
+
+  const campaignOne = {
+    name: "Rapid Containment Response",
+    headline: "Get Water Under Control Before the Damage Spreads",
+    angleReason: "Works because emergency buyers respond to speed, calm guidance, and the promise of a first controlled step.",
+    cta: "Call for Immediate Response",
+    visualPrompt: "Water mitigation crew arriving at a residential property with drying equipment, calm professional emergency-response campaign image.",
+    editPrompt: "Turn this property damage image into an emergency response ad with overlay text 'Immediate Water Damage Response'.",
+    videoPrompt: "Vertical ad showing wet floor panic, mitigation crew arrival, and rapid setup with text 'Stop the Damage Early'.",
+    storyboard: [
+      "Shot 1: Visible water issue with text 'Water Spreading Fast?'",
+      "Shot 2: Crew arrival and setup with overlay 'Immediate Containment'",
+      "Shot 3: Controlled scene with text 'Call for Rapid Response'"
+    ]
+  };
+  const campaignTwo = {
+    name: claimHelp ? "Documented Drying Path" : "Drying and Mitigation Clarity",
+    headline: claimHelp ? "Get Drying Started With Clear Photos and Documentation" : "Show Homeowners What Happens After the First Call",
+    angleReason: "Works because restoration buyers need process clarity almost as much as emergency speed.",
+    cta: "Book Assessment",
+    visualPrompt: "Mitigation specialist documenting moisture readings and drying equipment in a residential interior, clean professional restoration marketing image.",
+    editPrompt: "Turn this mitigation image into a drying-plan ad with overlay text 'Documented Drying and Mitigation'.",
+    videoPrompt: "Vertical ad showing moisture checks, drying setup, and homeowner reassurance with text 'Know the Plan'.",
+    storyboard: [
+      "Shot 1: Damp interior and uncertainty with text 'What Happens Next?'",
+      "Shot 2: Moisture reading and drying plan with overlay 'Photo-Documented Mitigation'",
+      "Shot 3: Homeowner reassurance with text 'Get a Clear Response Plan'"
+    ]
+  };
+  const campaignThree = {
+    name: rebuild ? "Mitigation to Rebuild Continuity" : "Referral Trust Builder",
+    headline: rebuild ? "Take the Home From Water Damage to Full Recovery With One Coordinated Plan" : "Be the Restoration Team Referral Partners Trust to Call First",
+    angleReason: rebuild ? "Works because homeowners hate fragmented recovery and prefer one clear next-step path." : "Works because referrals compound when the operator feels organized, fast, and easy to trust.",
+    cta: rebuild ? "See Full Recovery Options" : "Partner With Our Response Team",
+    visualPrompt: rebuild ? "Restoration project moving from water mitigation into clean rebuild finish, premium full-recovery campaign image." : "Professional restoration team with plumber or property manager referral context, trusted local service campaign image.",
+    editPrompt: rebuild ? "Turn this water-damage image into a full recovery ad with overlay text 'Mitigation Through Rebuild'.": "Turn this team image into a referral partnership ad with overlay text 'Fast Response Partners'.",
+    videoPrompt: rebuild ? "Vertical ad showing damaged room, mitigation work, and finished rebuilt space with text 'From Damage to Recovery'." : "Vertical ad showing referral call, fast dispatch, and clean communication with text 'Trusted Emergency Partner'.",
+    storyboard: [
+      "Shot 1: Damage stress with text 'Need More Than Just Cleanup?'",
+      "Shot 2: Coordinated team or referral communication with overlay 'Clear Recovery Path'",
+      "Shot 3: Restored confidence with text 'Start Your Recovery Plan'"
+    ]
+  };
+
+  return {
+    recommendedMotion,
+    upsellPath,
+    leadStory,
+    closeMove,
+    primaryCampaign: campaignOne,
+    scoreboard: {
+      responseScore,
+      urgencyBand: immediate ? "Emergency response" : sameDay ? "Fast same-day" : "Planned follow-up",
+      trustPoints: [
+        liveDispatch ? "24/7 intake confidence" : "Structured callback process",
+        claimHelp ? "Documentation-first wording" : "Direct homeowner clarity",
+        rebuild ? "Mitigation to rebuild path" : partnerRebuild ? "Partner handoff path" : "Mitigation focus",
+        plumber ? "Plumber referral fit" : realtor ? "Property-professional fit" : "Homeowner calm-first tone"
+      ]
+    },
+    triageNarrative: {
+      dispatchFraming: immediate ? "Open with urgency, arrival expectations, and immediate containment priorities." : "Open with damage verification, documentation, and whether active moisture spread is still happening.",
+      homeownerTalkTrack: "Reduce panic first, then explain the first controllable step: stop spread, document conditions, start drying, then decide broader scope.",
+      insuranceWording: claimHelp ? "Use phrases like documentation, moisture readings, and condition reporting. Avoid claim outcome promises." : "Stay careful: describe work performed and conditions observed, not insurance outcomes.",
+      rebuildTransition: rebuild ? "Once mitigation trust is earned, frame rebuild as continuity, simplicity, and fewer handoff failures." : "If rebuild is not internal, position trusted partner handoff without overreaching."
+    },
+    salesAssets: {
+      dispatchScript: `Thanks for calling ${input.companyName}. First, tell me if water is still actively entering the property. Our goal is to help you contain further damage quickly and get the right crew response in ${input.market}.`,
+      referralFollowUp: plumber ? "Thanks for sending this over. We will move fast, document conditions clearly, and keep you updated so the homeowner sees one coordinated response." : realtor ? "We can document the situation, communicate clearly, and help stabilize the property while protecting the client experience." : "We will confirm the first on-site step, expected arrival, and what to do before the crew gets there.",
+      smsFollowUp: `This is ${input.companyName}. We are preparing the best next step for your ${input.jobType.toLowerCase()} in ${input.market}. Keep the area safe, avoid spreading moisture, and we will guide you through the first response plan.`,
+      emailSubject: "Your water damage response plan and next step",
+      emailBody: `Thanks for contacting ${input.companyName}. Our next step is to verify active damage, document conditions, and set the right mitigation response. We will keep the process clear so you understand what happens first, what gets documented, and how recovery can move forward.`,
+      objectionHandling: [
+        "Can it wait until tomorrow: explain moisture spread risk without fear-mongering, then give the safest immediate next step.",
+        "Will insurance cover it: avoid promises and anchor on documentation, readings, and clear records.",
+        "Do I need rebuild too: keep rebuild secondary until mitigation scope is understood and trust is earned.",
+        "I am calling multiple companies: differentiate on speed, communication, and documentation quality."
+      ]
+    },
+    responsePlan: {
+      pathOptions: [
+        {
+          name: "Emergency Mitigation",
+          bestFor: "Active leaks, rapid spread, and high-stress homeowner situations.",
+          includes: ["Fast triage","Containment focus","Drying setup","Clear next-step communication"]
+        },
+        {
+          name: "Documented Drying",
+          bestFor: "Jobs that need readings, photo proof, and insurer-safe communication.",
+          includes: ["Moisture documentation","Drying plan","Progress communication","Condition reporting"]
+        },
+        {
+          name: "Recovery Path",
+          bestFor: "Jobs with material loss or homeowner interest in one coordinated recovery path.",
+          includes: ["Mitigation outcome review","Rebuild or partner handoff","Expectation setting","Higher-value close path"]
+        }
+      ],
+      documentationHook: "Sell photo proof, readings, and communication discipline as trust assets, not bureaucracy.",
+      complianceNote: "Do not promise insurance approval or exact outcome. Document observed conditions and work performed."
+    },
+    campaigns: [campaignOne, campaignTwo, campaignThree],
+    launchPlan: {
+      thisWeek: [
+        "Create one emergency-call landing page, one documented-drying page, and one mitigation-to-rebuild page.",
+        "Train dispatch to separate true emergency, same-day, and estimate-follow-up callers.",
+        "Build a plumber and property-manager follow-up sequence within 10 minutes of first response."
+      ],
+      next30Days: [
+        "Track call-to-dispatch, dispatch-to-approved-work, and mitigation-to-rebuild conversion.",
+        "Collect three case stories split across emergency mitigation, documented drying, and full recovery.",
+        "Build referral-specific variants for plumbers, realtors, and property managers."
+      ],
+      kpis: ["Call answer rate","Dispatch conversion rate","Approved work rate","Mitigation-to-rebuild handoff rate"]
     }
-  }
+  };
+}
+
+async function buildMedia(primaryCampaign, imageUrl) {
   try {
-    return await generatePromo(promo);
+    if (imageUrl) {
+      const edited = await editImage(primaryCampaign, imageUrl);
+      return { primaryVisualPrompt: primaryCampaign.visualPrompt, videoHook: primaryCampaign.videoPrompt, storyboard: primaryCampaign.storyboard, heroImageUrl: edited.imageUrl, statusNote: edited.statusNote };
+    }
+    const generated = await generateImage(primaryCampaign);
+    return { primaryVisualPrompt: primaryCampaign.visualPrompt, videoHook: primaryCampaign.videoPrompt, storyboard: primaryCampaign.storyboard, heroImageUrl: generated.imageUrl, statusNote: generated.statusNote };
   } catch (error) {
-    return { ...pickPromoFields(promo), imageUrl: "", statusNote: `Image generation was unavailable: ${error.message}` };
+    return { primaryVisualPrompt: primaryCampaign.visualPrompt, videoHook: primaryCampaign.videoPrompt, storyboard: primaryCampaign.storyboard, heroImageUrl: "", statusNote: `Image pipeline unavailable: ${error.message}` };
   }
 }
 
-async function editPromo(promo, imageUrl) {
+async function editImage(campaign, imageUrl) {
   const sourceResponse = await fetch(imageUrl, { signal: AbortSignal.timeout(10000) });
   if (!sourceResponse.ok) throw new Error(`Unable to fetch source image (${sourceResponse.status})`);
   const contentType = sourceResponse.headers.get("content-type") || "image/jpeg";
@@ -250,137 +529,46 @@ async function editPromo(promo, imageUrl) {
   const imageBlob = await sourceResponse.blob();
   const form = new FormData();
   form.append("model", "grok-imagine-1.0-edit");
-  form.append("prompt", promo.editPrompt || promo.visualPrompt || promo.headline || "Create a polished water damage marketing poster.");
+  form.append("prompt", campaign.editPrompt || campaign.visualPrompt);
   form.append("size", "1024x1792");
   form.append("image", new File([imageBlob], `source.${extension}`, { type: contentType }));
   const response = await fetch("https://wuju.de5.net/v1/images/edits", {
     method: "POST",
-    signal: AbortSignal.timeout(15000),
+    signal: AbortSignal.timeout(18000),
     headers: { authorization: `Bearer ${FALLBACK_WUJU_API_KEY}` },
     body: form
   });
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`Edit failed (${response.status}): ${text.slice(0, 220)}`);
+    throw new Error(`Edit failed (${response.status}): ${text.slice(0,220)}`);
   }
   const data = await response.json();
-  const resultUrl = data?.data?.[0]?.url || data?.data?.[0]?.b64_json;
-  if (!isUsableImageValue(resultUrl)) return { ...pickPromoFields(promo), imageUrl: "", statusNote: "Image edit request completed, but the gateway did not return a usable image." };
-  return { ...pickPromoFields(promo), imageUrl: normalizeImage(resultUrl), statusNote: "Used source image edit flow." };
+  const value = data?.data?.[0]?.url || data?.data?.[0]?.b64_json;
+  if (!isUsableImageValue(value)) return { imageUrl: "", statusNote: "Image edit completed, but no usable image was returned." };
+  return { imageUrl: normalizeImage(value), statusNote: "Used source image edit flow." };
 }
 
-async function generatePromo(promo) {
+async function generateImage(campaign) {
   const response = await fetch("https://wuju.de5.net/v1/images/generations", {
     method: "POST",
-    signal: AbortSignal.timeout(15000),
+    signal: AbortSignal.timeout(18000),
     headers: { "content-type": "application/json", authorization: `Bearer ${FALLBACK_WUJU_API_KEY}` },
-    body: JSON.stringify({
-      model: "grok-imagine-1.0",
-      prompt: promo.visualPrompt || promo.editPrompt || promo.headline || "Create a premium water damage marketing poster.",
-      size: "1024x1792"
-    })
+    body: JSON.stringify({ model: "grok-imagine-1.0", prompt: campaign.visualPrompt, size: "1024x1792" })
   });
   if (!response.ok) {
     const text = await response.text();
-    throw new Error(`Generation failed (${response.status}): ${text.slice(0, 220)}`);
+    throw new Error(`Generation failed (${response.status}): ${text.slice(0,220)}`);
   }
   const data = await response.json();
-  const resultUrl = data?.data?.[0]?.url || data?.data?.[0]?.b64_json;
-  if (!isUsableImageValue(resultUrl)) return { ...pickPromoFields(promo), imageUrl: "", statusNote: "Image generation request completed, but the gateway did not return a usable image." };
-  return { ...pickPromoFields(promo), imageUrl: normalizeImage(resultUrl), statusNote: "Used text-to-image generation flow." };
-}
-
-function pickPromoFields(promo) {
-  return {
-    name: promo.name || "Promo direction",
-    headline: promo.headline || "",
-    subcopy: promo.subcopy || "",
-    cta: promo.cta || "",
-    visualPrompt: promo.visualPrompt || "",
-    editPrompt: promo.editPrompt || "",
-    videoPrompt: promo.videoPrompt || "",
-    storyboard: Array.isArray(promo.storyboard) ? promo.storyboard.slice(0, 3) : []
-  };
-}
-
-function normalizeImage(value) {
-  if (value.startsWith("http")) return value;
-  return `data:image/png;base64,${value}`;
+  const value = data?.data?.[0]?.url || data?.data?.[0]?.b64_json;
+  if (!isUsableImageValue(value)) return { imageUrl: "", statusNote: "Image generation completed, but no usable image was returned." };
+  return { imageUrl: normalizeImage(value), statusNote: "Used text-to-image generation flow." };
 }
 
 function isUsableImageValue(value) {
   if (!value || typeof value !== "string") return false;
   const normalized = value.trim().toLowerCase();
-  return normalized !== "error" && normalized !== "null" && normalized !== "undefined";
+  return normalized !== "null" && normalized !== "undefined" && normalized !== "error";
 }
-
-function fallbackStrategy(notes, reason) {
-  const brief = (notes || "").toLowerCase();
-  const mentionsDrying = brief.includes("dry") || brief.includes("mitigation");
-  const mentionsInsurance = brief.includes("insurance") || brief.includes("restoration");
-  return {
-    summary: {
-      targetBuyer: "Homeowners and property managers facing sudden water intrusion, burst pipes, flooding, or restoration follow-up after damage.",
-      positioning: "Rapid-response local mitigation crews with clean communication, drying technology, documentation support, and insurance-friendly processes.",
-      bestUse: "Use for emergency paid social, local landing pages, insurance-friendly quote funnels, and short-form video ads."
-    },
-    promos: [
-      {
-        name: "Rapid Water Rescue",
-        headline: "Water Damage? Get Fast Extraction and Cleanup",
-        subcopy: "Stop damage from spreading with rapid local response, extraction equipment, and a crew that gets your property under control fast.",
-        cta: "Call Emergency Crew",
-        visualPrompt: "Emergency water damage crew extracting water from a residential room with professional drying equipment, realistic urgent cleanup scene.",
-        editPrompt: "Transform the property image into a professional emergency mitigation scene and add text 'Emergency Water Cleanup'.",
-        videoPrompt: "Vertical ad showing standing water, emergency extraction, and safer drying setup with text 'Fast Water Damage Response'.",
-        storyboard: [
-          "Shot 1: Water-damaged room with text 'Water Everywhere?'",
-          "Shot 2: Extraction team at work with overlay 'Rapid Local Response'",
-          "Shot 3: Controlled drying setup with text 'Call Before Damage Spreads'"
-        ]
-      },
-      {
-        name: mentionsDrying ? "Structural Drying Control" : "Mitigation Stabilize",
-        headline: mentionsDrying ? "Dry Out the Structure Before Bigger Problems Start" : "Professional Water Mitigation That Stabilizes the Property Fast",
-        subcopy: "Use professional drying, dehumidification, and monitoring to bring moisture down quickly and protect the next phase of repair.",
-        cta: "Book Drying Assessment",
-        visualPrompt: "Water mitigation technicians placing dehumidifiers and air movers through a residential property, clean professional restoration style.",
-        editPrompt: "Add drying equipment, moisture-readout overlays, and text 'Structural Drying & Monitoring' to the property image.",
-        videoPrompt: "Vertical ad showing moisture checks, drying equipment placement, and stabilized property with text 'Professional Drying Fast'.",
-        storyboard: [
-          "Shot 1: Moisture meter reading with text 'Hidden Moisture?'",
-          "Shot 2: Air movers and dehumidifiers set up with overlay 'Drying Technology'",
-          "Shot 3: Dry stabilized room with text 'Schedule Mitigation Now'"
-        ]
-      },
-      {
-        name: mentionsInsurance ? "Claim-Ready Restoration Help" : "Restoration Pathway",
-        headline: mentionsInsurance ? "Need Clean Documentation for Insurance and Restoration?" : "Move from Damage to Restoration with One Clear Plan",
-        subcopy: "Make the next step easier with clean reporting, photos, moisture logs, and restoration coordination that keeps the process moving.",
-        cta: "Get Restoration Review",
-        visualPrompt: "Restoration project manager reviewing water damage documentation inside a home with clean dry restored area visible, trustworthy professional scene.",
-        editPrompt: "Overlay insurance-friendly documentation visuals and add text 'Restoration Coordination + Reporting'.",
-        videoPrompt: "Vertical ad showing documented damage, drying complete, and restoration planning with text 'From Water Damage to Recovery'.",
-        storyboard: [
-          "Shot 1: Damage photos and notes with text 'Need a Clear Next Step?'",
-          "Shot 2: Coordinator reviews documentation with overlay 'Clean Reporting'",
-          "Shot 3: Restored-ready space with text 'Start Your Recovery Plan'"
-        ]
-      }
-    ],
-    launchMoves: [
-      "Run geo-targeted emergency ads split by extraction, structural drying, and insurance-friendly restoration support intent.",
-      "Build dedicated landing sections for emergency response, drying and mitigation, and restoration coordination with call-now and quote-request flows.",
-      "Send follow-up email and SMS to past customers, plumbers, and real estate contacts promoting rapid response and documentation-ready mitigation services."
-    ],
-    serviceOffer: {
-      packageName: "DryGuard Revenue Pack",
-      priceIdea: "$250 emergency dispatch, drying and mitigation quoted by severity, restoration coordination priced by project scope",
-      upsell: `Add insurance-claim pages, emergency funnels, referral pages, and review capture. Fallback reason: ${reason}`
-    }
-  };
-}
-
-function json(data, status = 200) {
-  return new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8" } });
-}
+function normalizeImage(value) { return value.startsWith("http") ? value : `data:image/png;base64,${value}`; }
+function json(data, status = 200) { return new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8" } }); }
