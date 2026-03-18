@@ -1,0 +1,9 @@
+{
+  "name": "waterdamagepromolab-mvp",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-03-01",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  }
+}

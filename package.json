@@ -1,0 +1,16 @@
+{
+  "name": "waterdamagepromolab-mvp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "jsonrepair": "^3.13.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.8.0"
+  }
+}
